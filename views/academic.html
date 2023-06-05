@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <script src="https://d3js.org/d3.v7.js" charset="utf-8"></script>
+  <link rel="stylesheet" type="text/css" href="/stylesheets/style.css">
+  <title>Academic Year Statistics</title>
+</head>
+<body>
+  <!--nav bar-->
+  <div id="topnav">
+    <form method="GET" action="item">
+        <ul>
+            <li id="home"><a href=".">Home</a></li>
+            <li><a href="/summer">Summer School</a></li>
+            <li><a href="/academic">Academic Year</a></li>
+        </ul>
+      </form>
+  </div>
+
+  <div class="div">
+    <p>We analyzed the locations of classes (by room and building) throughout the 22-23 school year. Click through the tabs below for more information: </p>
+  </div>
+
+    <div class="tab">
+    <button class="tablinks" onclick="openCity(event, 'CPR')" id="defaultOpen">Classes Per Room &#40;CPR&#41;</button>
+    <button class="tablinks" onclick="openCity(event, 'CPB')">Classes Per Building &#40;CPB&#41;</button>
+    <button class="tablinks" onclick="openCity(event, 'CPR1')">CPR &#40;Sem1&#41;</button>
+    <button class="tablinks" onclick="openCity(event, 'CPB1')">CPB &#40;Sem1&#41;</button>
+    <button class="tablinks" onclick="openCity(event, 'CPR2')">CPR &#40;Sem2&#41;</button>
+    <button class="tablinks" onclick="openCity(event, 'CPB2')">CPB &#40;Sem2&#41;</button>
+    <button class="tablinks" onclick="openCity(event, 'CPRYR')">CPR &#40;yearlong&#41;</button>
+    <button class="tablinks" onclick="openCity(event, 'CPBYR')">CPB &#40;yearlong&#41;</button>
+</div>
+    <div id="CPR" class="tabcontent">
+    <h3>Classes Per Room &#40;All&#41;</h3>
+    <img class = "tabImage" src="/images/rooms.png">
+    </div>
+
+    <div id="CPB" class="tabcontent">
+    <h3>Classes Per Building &#40;All&#41;</h3>
+    <img class = "tabImage" src="/images/buildings.png">
+    </div>
+
+    <div id="CPR1" class="tabcontent">
+    <h3>Classes Per Room &#40;First Semester&#41;</h3>
+    <img class = "tabImage" src="/images/roomsSemester1.png">
+    </div>
+
+    <div id="CPB1" class="tabcontent">
+    <h3>Classes Per Building &#40;First Semester&#41;</h3>
+    <img class = "tabImage" src="/images/buildingsSemester1.png">
+    </div>
+
+    <div id="CPR2" class="tabcontent">
+    <h3>Classes Per Room &#40;Second Semester&#41;</h3>
+    <img class = "tabImage" src="/images/roomsSemester2.png">
+    </div>
+
+    <div id="CPB2" class="tabcontent">
+    <h3>Classes Per Building &#40;Second Semester&#41;</h3>
+    <img class = "tabImage" src="/images/buildingsSemester2.png">
+    </div>
+
+    <div id="CPRYR" class="tabcontent">
+    <h3>Classes Per Room &#40;Yearlong&#41;</h3>
+    <img class = "tabImage" src="/images/roomFullYear.png">
+    </div>
+
+    <div id="CPBYR" class="tabcontent">
+    <h3>Classes Per Building &#40;Yearlong&#41;</h3>
+    <img class = "tabImage" src="/images/buildingsFullYear.png">
+    </div>
+    <script>
+    function openCity(evt, cityName) {
+    var i, tabcontent, tablinks;
+    tabcontent = document.getElementsByClassName("tabcontent");
+    for (i = 0; i < tabcontent.length; i++) {
+        tabcontent[i].style.display = "none";
+    }
+    tablinks = document.getElementsByClassName("tablinks");
+    for (i = 0; i < tablinks.length; i++) {
+        tablinks[i].className = tablinks[i].className.replace(" active", "");
+    }
+    document.getElementById(cityName).style.display = "block";
+    evt.currentTarget.className += " active";
+    }
+    document.getElementById("defaultOpen").click();
+    </script>
+</body>
+</html>

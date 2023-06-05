@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <script src="https://d3js.org/d3.v7.js" charset="utf-8"></script>
+  <link rel="stylesheet" type="text/css" href="/stylesheets/style.css">
+  <!-- Color Scale -->
+  <script src="https://d3js.org/d3-scale-chromatic.v1.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/d3-legend/2.25.6/d3-legend.js"></script> <!--for d3.legendColor()-->
+  <title>Summer School Statistics</title>
+</head>
+<body>
+  <!--nav bar-->
+  <div id="topnav">
+    <form method="GET" action="item">
+        <ul>
+            <li id="home"><a href=".">Home</a></li>
+            <li><a href="/summer">Summer School</a></li>
+            <li><a href="/academic">Academic Year</a></li>
+        </ul>
+      </form>
+  </div>
+  <div class="div">
+    <p>Here is a visualisation showing summer school course signups from 2015 to 2023. Each line on the graph corresponds to a subject, labeled on the right. Every datapoint is the total number of course signups for each subject based on year. Hover over a datapoint to see the exact number of signups. To see the expanded data for specific courses in each subject, click anywhere on the data for that subject. Note that this will also make the data for other subjects disappear. To return to the original graph, click the “Return to Original Graph” button.</p>
+    <div id="graph"></div>
+    <div id="sideGraph">
+      <div id="button" onclick="originalGraph();"></div>
+      <div id="legend"></div>
+    </div>
+  </div>
+  <script>
+  // set the dimensions and margins of the graph
+  var margin = {top: 10, right: 30, bottom: 50, left: 50},
+    width = 460 - margin.left - margin.right,
+    height = 400 - margin.top - margin.bottom;
+  var button = document.getElementById("button");
+  var svg = d3.select("#graph")
+      .append("svg")
+        .attr("width", width + margin.left + margin.right)
+        .attr("height", height + margin.top + margin.bottom)
+      .append("g")
+        .attr("transform",
+            "translate(" + margin.left + "," + margin.top + ")");
+  var svg2 = d3.select("#legend").append("svg")
+      .attr("width", 200)
+      .attr("height", 150);
+
+  originalGraph();
+
+  function originalGraph() {
+    button.style.visibility = 'hidden';
+    svg.selectAll("*").remove();
+    // Read the data
+    d3.csv("/data/summerSchool.csv").then(function(data) {
+      var allGroup = ["Math", "History", "Science", "Art", "English"]
+      plotGraph(allGroup, data);
+      svg.selectAll(".line")
+        .on('mouseover', function (d, i) {
+          d3.select(this).transition()
+            .duration('50')
+            .attr('opacity', '.85')})
+        .on('mouseout', function (d, i) {
+          d3.select(this).transition()
+            .duration('50')
+            .attr('opacity', '1')
+        })
+    });
+  }
+
+  function plotGraph(allGroup, data) {
+    // Reformat the data: we need an array of arrays of {x, y} tuples
+    var dataReady = allGroup.map( function(grpName) { 
+      return {
+        name: grpName,
+        values: data.map(function(d) {
+          return {year: d.Year, value: +d[grpName]};
+        })
+      };
+    });
+
+    // A color scale: one color for each group
+    var myColor = d3.scaleOrdinal()
+      .domain(allGroup)
+      .range(d3.schemeSet2);
+
+    // add x axis
+    var x = d3.scaleLinear()
+      .domain(d3.extent(data, function(d) { return d.Year; }))
+      .range([ 0, width ]);
+    svg.append("g")
+      .attr("transform", "translate(0," + height + ")")
+      .call(d3.axisBottom(x).tickFormat(d3.format("d")));
+    // Add Y axis
+    var y = d3.scaleLinear()
+      .domain( [0, 100])
+      .range([ height, 0 ]);
+    svg.append("g")
+      .call(d3.axisLeft(y));
+
+    //x-axis label
+    svg.append("text")
+      .attr("text-anchor", "end")
+      .attr("x", width)
+      .attr("y", height + margin.top + 30)
+      .text("Year");
+    //y-axis label
+    svg.append("text")
+      .attr("text-anchor", "end")
+      .attr("transform", "rotate(-90)")
+      .attr("y", -margin.left+15)
+      .attr("x", -margin.top)
+      .text("Number of enrollments")
+    
+    // Add the lines
+    var line = d3.line()
+      .x(function(d) { return x(+d.year) })
+      .y(function(d) { return y(+d.value) })
+    svg.selectAll("myLines")
+      .data(dataReady)
+      .enter()
+      .append("path")
+        .attr("d", function(d){ return line(d.values) } )
+        .attr("stroke", function(d){ return myColor(d.name) })
+        .style("stroke-width", 4)
+        .style("fill", "none")
+        .attr("class", "line")
+        .on("click", function(event, d) { return replaceGraph(d.name, data); });
+    
+    var div = d3.select("body").append("div") // div with that shows y value of the point
+      .attr("class", "labelDiv")
+      .style("opacity", 0);
+
+    // Add the points
+    svg.selectAll("myDots")
+      .data(dataReady)
+      .enter()
+        .append('g')
+        .style("fill", function(d){ return myColor(d.name) })
+      .selectAll("myPoints")
+      .data(function(d){ return d.values })
+      .enter()
+      .append("circle")
+        .attr("cx", function(d) { return x(d.year) } )
+        .attr("cy", function(d) { return y(d.value) } )
+        .attr("r", 5)
+        .attr("stroke", "white")
+      .on('mouseover', function (event, d) {
+        d3.select(this).transition()
+          .duration('50')
+            .attr('opacity', '.85');
+        div.transition() 
+            .duration(50)
+            .style("opacity", 1);
+        div.html(d.value)
+            .style("left", (event.pageX-2) + "px")
+            .style("top", (event.pageY+5) + "px");
+     })
+     .on('mouseout', function (event, d) {
+        d3.select(this).transition()
+          .duration('50')
+          .attr('opacity', '1');
+        div.transition()
+          .duration('50')
+          .style("opacity", 0);
+     });
+    
+     //add legend
+    svg2.append("g")
+      .attr("class", "legendOrdinal")
+      .attr("transform", "translate(20,20)");
+    
+    var ordinal = d3.scaleOrdinal()
+        .domain(dataReady.map(function(d) { return d.name; }))
+        .range(dataReady.map(function(d) { return myColor(d.name); }));
+    
+    var legendOrdinal = d3.legendColor()
+    	.scale(ordinal);
+    
+    svg2.select(".legendOrdinal")
+	  	.call(legendOrdinal);
+    
+  }
+  function replaceGraph(category, data) {
+    var allGroup=newAllGroup(category);
+    if(allGroup!=null) {
+      svg.selectAll("*").remove(); // erase old graph
+      plotGraph(allGroup, data); // Then draw the new graph
+      button.innerHTML="Return to Original Graph";
+      button.style.visibility = 'visible';
+    }
+  }
+  function newAllGroup(category) {
+    var allGroup=null;
+    if(category=="History") {
+      allGroup = ["World History I","US History","Microeconomics"];
+    } else if(category=="Math") {
+      allGroup=["Algebra II","Precalculus","CS I","CS II","CS III"];
+    } else if (category == "Science") {
+      allGroup=["Biology","Physics","LSRI"];
+    } else if(category=="Art") {
+      allGroup=["Photography I","Digital Music"];
+    } else if(category=="English") {
+      allGroup=["English 10","Shakespeare"];
+    }
+    return allGroup;
+  }
+  </script>
+</body>
+</html>

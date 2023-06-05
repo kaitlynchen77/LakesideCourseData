@@ -1,0 +1,185 @@
+div.labelDiv {
+    position: absolute;
+    text-align: center;
+    padding: .25rem;
+    background: #FFFFFF;
+    color: #313639;
+    border: 1px solid #313639;
+    border-radius: 8px;
+    pointer-events: none;
+    font-size: 1rem;
+}
+
+
+body {       
+    font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+ul {
+    position: fixed;
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background-color: #333;
+    top: 0;
+    width: 100%;
+}
+
+li {
+    float: right;
+}
+
+li a  {
+    display: block;
+    color: white;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+    font-weight: bold;
+    font-size:x-large;
+}
+
+li a:hover {
+    background-color: #111;
+}
+
+#home {
+    float: left;
+}
+
+#indexBG {
+    background-image: url('https://rosemarywashington.files.wordpress.com/2014/06/image_4954.jpg');
+    /* Full height */
+    height: 100%;
+    /* Center and scale the image nicely */
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+#indexDiv { /*https://www.w3schools.com/howto/howto_css_blurred_background.asp*/
+    background-color: rgba(0,0,0, 0.4); /* Black w/opacity/see-through */
+    color: white;
+    font-weight: bold;
+    border: 3px solid #f1f1f1;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 2;
+    width: 60%;
+    padding: 20px;
+    padding-bottom: 40px;
+    text-align: center;
+  }
+
+  #getStarted {
+    background-color: rgba(51,51,51,0.9);
+    padding: 15px 30px;
+    font-size: 25px;
+    border: none;
+    font-weight: bold;
+    text-align: center;
+    border-radius: 10px;
+    color:#f1f1f1;
+  }
+
+
+h1{
+    margin-bottom: 20px;
+}
+#button {
+    background-color: rgb(51,51,51);
+    padding: 4px 7px;
+    font-size: 15px;
+    border: none;
+    font-weight: bold;
+    text-align: center;
+    border-radius: 10px;
+    color:#f1f1f1;
+    margin-right:70px;
+}
+#legend {
+    margin-right:90px;
+}
+.div {
+  margin: 5;
+  margin-top: 70px;
+  margin-left: 20%;
+  text-align: center;
+  width: 60%;
+  padding: 10px;
+  display: flex; /* Added */
+  flex-wrap: wrap; /* Added */
+  justify-content: center; /* Added */
+}
+
+#graph {
+  margin: 0 auto;
+  width: 70%; /* Added */
+  flex: 1 0 70%; /* Added */
+}
+
+#sideGraph {
+  width: 30%; /* Added */
+  flex: 1 0 20%; /* Added */
+}
+
+/* Style the tab */
+.tab {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  width: 80%;
+  overflow: hidden;
+  border: 1px solid #ccc;
+  background-color: #f1f1f1;
+  display: flex;
+  justify-content: space-around; /* Adjust this according to your needs */
+}
+
+/* Style the buttons inside the tab */
+.tab button {
+  background-color: inherit;
+  float: left;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  padding: 14px 16.835px;
+  transition: 0.3s;
+  font-size: 17px;
+}
+
+/* Change background color of buttons on hover */
+.tab button:hover {
+  background-color: #ddd;
+}
+
+/* Create an active/current tablink class */
+.tab button.active {
+  background-color: #ccc;
+}
+
+/* Style the tab content */
+.tabcontent {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  color: #000000;
+  display: none;
+  padding: 6px 12px;
+  border-top: none;
+  width: 85%;
+  background-color:#ccc;
+}
+.tabImage {
+  width:90%;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+.tablinks {
+  flex: 1; /* This means each tablink will take up an equal amount of space within the .tab container */
+}
